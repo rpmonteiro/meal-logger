@@ -35,11 +35,13 @@ export const FoodOverview: React.FunctionComponent<IFoodOverviewProps> = ({
             }, 0)
         ) || 0
 
+    const showTotalCalories = selectedItems.length > 0
+
     return (
         <section className="food-overview">
             {selectedItems.map((item, idx) => {
                 return (
-                    <div key={item.name} className="food-overview__row">
+                    <div key={`${item.name}-${idx}`} className="food-overview__row">
                         <div>{item.name}</div>
                         <input
                             value={item.consumedPortion || ''}
@@ -47,11 +49,17 @@ export const FoodOverview: React.FunctionComponent<IFoodOverviewProps> = ({
                             maxLength={4}
                             onChange={(e) => onChange(e, idx)}
                         />
+                        <span>g</span>
                     </div>
                 )
             })}
 
-            <div>{`Total calories: ${totalCalories} kcal`}</div>
+            {showTotalCalories && (
+                <div className="food-overview__calories">
+                    <span className="food-overview__calories__label">Total calories: </span>
+                    <span>{` ${totalCalories} kcal`}</span>
+                </div>
+            )}
         </section>
     )
 }

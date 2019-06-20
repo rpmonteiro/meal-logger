@@ -76,7 +76,11 @@ const ResultsBox: React.FunctionComponent<IResultsBoxProps> = ({
 
     return (
         <div className="results-box">
-            {loading && <div className="results-box__spinner" />}
+            {loading && (
+                <div className="results-box__spinner">
+                    <div className="results-box__spinner__element" />
+                </div>
+            )}
             {results.map((r) => (
                 <div key={r.id} className="results-box__result" onClick={() => onSelect(r)}>
                     <div className="results-box__result__name">{r.name}</div>
@@ -85,7 +89,7 @@ const ResultsBox: React.FunctionComponent<IResultsBoxProps> = ({
                             {`Portion: ${r.portion}g`},
                         </div>
                         <div className="results-box__result__kcal">
-                            {`${r.calories} calories / 100g`}
+                            {`${r.calories} kcal / 100g`}
                         </div>
                     </div>
                 </div>

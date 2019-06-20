@@ -11,5 +11,21 @@
         input {
             width: 35px;
         }
+
+        span {
+            margin-left: 5px;
+        }
+
+        & + & {
+            margin-top: $spacing-small;
+        }
+    }
+
+    &__calories {
+        margin-top: $spacing-normal;
+
+        &__label {
+            font-weight: 500;
+        }
     }
 }
