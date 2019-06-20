@@ -1,0 +1,15 @@
+@import '../../style-variables';
+
+.food-overview {
+    &__row {
+        display: flex;
+
+        * + * {
+            margin-left: $spacing-small;
+        }
+
+        input {
+            width: 35px;
+        }
+    }
+}

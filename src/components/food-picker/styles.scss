@@ -1,0 +1,50 @@
+@import '../../style-variables.scss';
+
+.food-picker {
+    position: relative;
+    width: 200px;
+
+    &__input {
+        width: 100%;
+    }
+}
+
+.results-box {
+    background-color: white;
+    position: absolute;
+    left: 0;
+    right: 0;
+
+    &__result {
+        padding: 5px 10px;
+
+        &__kcal,
+        &__portion {
+            display: inline-block;
+        }
+    }
+
+    &__spinner {
+        display: inline-block;
+
+        &::after {
+            content: ' ';
+            display: block;
+            width: 15px;
+            height: 15px;
+            margin: 1px;
+            border-radius: 50%;
+            border: 2px solid $color-orange;
+            border-color: $color-orange transparent $color-orange transparent;
+            animation: spinner 1.2s linear infinite;
+        }
+        @keyframes spinner {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    }
+}
