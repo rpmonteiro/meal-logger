@@ -27,6 +27,12 @@ export const FoodOverview: React.FunctionComponent<IFoodOverviewProps> = ({
         changeHandler(newSelectedItems)
     }
 
+    const onDelete = (idx: number) => {
+        const newSelectedItems = Array.from(selectedItems)
+        newSelectedItems.splice(idx, 1)
+        changeHandler(newSelectedItems)
+    }
+
     const totalCalories =
         Math.round(
             selectedItems.reduce((acc, i) => {
@@ -42,6 +48,9 @@ export const FoodOverview: React.FunctionComponent<IFoodOverviewProps> = ({
             {selectedItems.map((item, idx) => {
                 return (
                     <div key={`${item.name}-${idx}`} className="food-overview__row">
+                        <div className="food-overview__row__delete" onClick={() => onDelete(idx)}>
+                            X
+                        </div>
                         <div>{item.name}</div>
                         <input
                             value={item.consumedPortion || ''}

@@ -15,6 +15,7 @@ export const FoodPicker: React.FunctionComponent<IFoodPickerProps> = ({ onSelect
     const [loading, setLoading] = useState<boolean>(false)
     const [searchQuery, setSearchQuery] = useState<string>('')
     const [pristine, setPristine] = useState<boolean>(true)
+    const [noResults, setNoResults] = useState<boolean>(false)
     const [foodSearchResults, setFoodSearchResults] = useState<IFoodItem[]>([])
 
     useEffect(() => {
@@ -22,9 +23,14 @@ export const FoodPicker: React.FunctionComponent<IFoodPickerProps> = ({ onSelect
         if (!searchQuery) {
             return
         }
+        setNoResults(false)
         setLoading(true)
         searchFoodItems(searchQuery)
             .then((res) => {
+                if (!res.length) {
+                    setNoResults(true)
+                }
+
                 setFoodSearchResults(res)
                 setLoading(false)
             })
@@ -34,6 +40,7 @@ export const FoodPicker: React.FunctionComponent<IFoodPickerProps> = ({ onSelect
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const query = e.target.value
         const isPristine = !query
+        setNoResults(false)
         setSearchQuery(query)
         setPristine(isPristine)
     }
@@ -41,6 +48,7 @@ export const FoodPicker: React.FunctionComponent<IFoodPickerProps> = ({ onSelect
     const onItemSelect = (item: IFoodItem) => {
         setSearchQuery('')
         setPristine(true)
+        setNoResults(false)
         onSelect(item)
     }
 
@@ -52,6 +60,7 @@ export const FoodPicker: React.FunctionComponent<IFoodPickerProps> = ({ onSelect
                 loading={loading}
                 onSelect={onItemSelect}
                 results={foodSearchResults}
+                noResults={noResults}
             />
         </div>
     )
@@ -60,6 +69,7 @@ export const FoodPicker: React.FunctionComponent<IFoodPickerProps> = ({ onSelect
 interface IResultsBoxProps {
     loading: boolean
     results: IFoodItem[]
+    noResults: boolean
     pristine: boolean
     onSelect: (item: IFoodItem) => void
 }
@@ -68,7 +78,8 @@ const ResultsBox: React.FunctionComponent<IResultsBoxProps> = ({
     loading,
     results,
     onSelect,
-    pristine
+    pristine,
+    noResults
 }) => {
     if (pristine) {
         return null
@@ -81,6 +92,13 @@ const ResultsBox: React.FunctionComponent<IResultsBoxProps> = ({
                     <div className="results-box__spinner__element" />
                 </div>
             )}
+
+            {noResults && (
+                <div className="results-box__no-results">
+                    Sorry, we can't find that item on our database.
+                </div>
+            )}
+
             {results.map((r) => (
                 <div key={r.id} className="results-box__result" onClick={() => onSelect(r)}>
                     <div className="results-box__result__name">{r.name}</div>

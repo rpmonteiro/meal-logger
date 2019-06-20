@@ -3,6 +3,27 @@
 .food-overview {
     &__row {
         display: flex;
+        position: relative;
+
+        &__delete {
+            cursor: pointer;
+            color: $color-red;
+            font-weight: 500;
+            padding: 10px;
+            transition: opacity 50ms ease-out, color 50ms ease-out;
+            opacity: 0;
+            position: absolute;
+            left: -20px;
+            top: -10px;
+
+            &:hover {
+                color: darken($color-red, 10);
+            }
+
+            :hover > & {
+                opacity: 1;
+            }
+        }
 
         * + * {
             margin-left: $spacing-small;
