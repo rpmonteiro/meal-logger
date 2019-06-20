@@ -2,16 +2,24 @@ import './styles.scss'
 import * as React from 'react'
 import { useState, useEffect } from 'react'
 import { searchFoodItems as searchFoodItemsApiCall } from '../../api/food-service'
-import { IFoodItem } from '../../types'
+import { IFoodItem, Meal } from '../../types'
 import AwesomeDebouncePromise from 'awesome-debounce-promise'
 
 interface IFoodPickerProps {
     onSelect: (item: IFoodItem) => void
+    currentMeal: Meal
+    onCurrentMealChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+    onAddMeal: () => void
 }
 
 const searchFoodItems = AwesomeDebouncePromise(searchFoodItemsApiCall, 300)
 
-export const FoodPicker: React.FunctionComponent<IFoodPickerProps> = ({ onSelect }) => {
+export const FoodPicker: React.FunctionComponent<IFoodPickerProps> = ({
+    onSelect,
+    currentMeal,
+    onCurrentMealChange,
+    onAddMeal
+}) => {
     const [loading, setLoading] = useState<boolean>(false)
     const [searchQuery, setSearchQuery] = useState<string>('')
     const [pristine, setPristine] = useState<boolean>(true)
@@ -26,12 +34,12 @@ export const FoodPicker: React.FunctionComponent<IFoodPickerProps> = ({ onSelect
         setNoResults(false)
         setLoading(true)
         searchFoodItems(searchQuery)
-            .then((res) => {
-                if (!res.length) {
+            .then(({ data }) => {
+                if (!data.length) {
                     setNoResults(true)
                 }
 
-                setFoodSearchResults(res)
+                setFoodSearchResults(data)
                 setLoading(false)
             })
             .catch((e) => console.log('err', e))
@@ -54,6 +62,29 @@ export const FoodPicker: React.FunctionComponent<IFoodPickerProps> = ({ onSelect
 
     return (
         <div className="food-picker">
+            <div>
+                <input
+                    type="radio"
+                    onChange={onCurrentMealChange}
+                    value="breakfast"
+                    checked={currentMeal === 'breakfast'}
+                />
+                <input
+                    type="radio"
+                    onChange={onCurrentMealChange}
+                    value="lunch"
+                    checked={currentMeal === 'lunch'}
+                />
+                <input
+                    type="radio"
+                    onChange={onCurrentMealChange}
+                    value="dinner"
+                    checked={currentMeal === 'dinner'}
+                />
+            </div>
+
+            <button onClick={onAddMeal}>Add meal</button>
+
             <input className="food-picker__input" value={searchQuery} onChange={handleOnChange} />
             <ResultsBox
                 pristine={pristine}
